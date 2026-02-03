@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HGAL Academy: Models of Nursing Care</title>
+    
+    <!-- Google Fonts: Merriweather for main text, Inter for UI elements -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- RESET & BASE STYLES --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg-dark-start: #1a1a1a;
+            --bg-dark-end: #0f0f0f;
+            --text-primary: #e0e0e0;
+            --text-accent: #4ade80; /* WhatsApp-ish green accent */
+            --text-highlight: #60a5fa; /* Soft blue for headings */
+            --font-main: 'Merriweather', serif;
+            --font-ui: 'Inter', sans-serif;
+            --spacing-base: 1.8rem;
+        }
+
+        body {
+            background: linear-gradient(180deg, var(--bg-dark-start) 0%, var(--bg-dark-end) 100%);
+            color: var(--text-primary);
+            font-family: var(--font-main);
+            font-size: 22px; /* Starting base for mobile, scaled up for desktop */
+            line-height: 1.8;
+            min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- SCROLL PROGRESS BAR --- */
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--text-accent);
+            width: 0%;
+            transition: width 0.1s ease-out;
+            box-shadow: 0 0 10px var(--text-accent);
+        }
+
+        /* --- CONTAINER --- */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px 100px 20px;
+        }
+
+        /* --- LOGO --- */
+        .logo-container {
+            text-align: center;
+            margin-bottom: 60px;
+            opacity: 0; 
+            animation: fadeInDown 1s forwards;
+        }
+
+        .logo-img {
+            width: 100%;
+            max-width: 400px; /* Constrained for layout, but high res source */
+            height: auto;
+            filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.1));
+        }
+
+        /* --- TYPOGRAPHY & ANIMATION CLASSES --- */
+        h1 {
+            color: var(--text-accent);
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 40px;
+            font-family: var(--font-ui);
+            letter-spacing: -0.02em;
+        }
+
+        h2 {
+            color: var(--text-highlight);
+            font-size: 1.8rem;
+            margin-top: 60px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--text-highlight);
+            padding-left: 15px;
+        }
+
+        p {
+            margin-bottom: var(--spacing-base);
+            font-weight: 300;
+        }
+
+        strong {
+            color: #fff;
+            font-weight: 700;
+        }
+
+        .highlight-text {
+            color: var(--text-accent);
+            font-weight: bold;
+        }
+
+        /* The "WhatsApp" continuous feel - no cards, just flow */
+        .chat-bubble-effect {
+            /* Optional: subtle border to mimic a message block without being a card */
+            /* border-left: 2px solid rgba(255,255,255,0.05); */
+            /* padding-left: 15px; */
+        }
+
+        /* Scroll Reveal Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- VIP SECTION --- */
+        .vip-container {
+            margin-top: 80px;
+            text-align: center;
+            border-top: 1px dashed rgba(255, 255, 255, 0.2);
+            padding-top: 40px;
+        }
+
+        .vip-text {
+            font-size: 1.4rem;
+            color: #ffd700; /* Gold */
+            margin-bottom: 30px;
+        }
+
+        .vip-btn {
+            display: inline-block;
+            background-color: var(--text-accent);
+            color: #000;
+            font-family: var(--font-ui);
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 20px 50px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+            animation: pulse 2s infinite;
+        }
+
+        .vip-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px var(--text-accent);
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.4); }
+            70% { box-shadow: 0 0 0 20px rgba(74, 222, 128, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); }
+        }
+
+        /* --- RESPONSIVE ADJUSTMENTS --- */
+        @media (min-width: 768px) {
+            body {
+                font-size: 26px; /* Desired large size for desktop/tablets */
+            }
+            h1 { font-size: 3rem; }
+            h2 { font-size: 2.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Scroll Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <div class="container">
+        <!-- Logo Header -->
+        <div class="logo-container">
+            <img src="https://i.imgur.com/eP0BFrd.png" alt="HGAL Academy Logo" class="logo-img">
+        </div>
+
+        <!-- Introduction -->
+        <div class="content-flow">
+            <h1 class="reveal">Models of Nursing Care Delivery</h1>
+
+            <p class="reveal">Hello there! 👋 Welcome to today’s session. I’m so excited to guide you through this topic. Think of us sitting in a comfortable classroom, just chatting about how hospitals actually work.</p>
+
+            <p class="reveal">Today, we are going to explore the <strong>Models of Nursing Care Delivery</strong>. That sounds like a big, fancy title, right? 🧐 But honestly, it just means: <em>"How do nurses organize themselves to take care of patients?"</em></p>
+
+            <p class="reveal">Imagine you want to clean a huge house. You could do it all by yourself, OR you could get a team where one person sweeps, one washes dishes, and one dusts. Hospitals are the same! They have different "strategies" for organizing nurses to make sure everyone gets well. 🏥</p>
+
+            <p class="reveal">Ready? Let's dive into the first model! 👇</p>
+
+            <!-- 1. Functional Nursing -->
+            <h2 class="reveal">1. Functional Nursing Method</h2>
+
+            <p class="reveal">Let’s start with the <strong>Functional Nursing method</strong>. Imagine an assembly line in a factory. 🏭 Everyone has <em>one specific job</em> to do over and over again.</p>
+
+            <p class="reveal">In this model, the focus is purely on <strong>completing tasks</strong>. We use different levels of staff depending on how hard the job is. The idea is to be super efficient, like a machine! ⚙️</p>
+
+            <p class="reveal">Here, staff members with less training might do the simpler jobs, while the professional nurses handle the complex stuff. The "Head Nurse" is like the factory manager giving out orders.</p>
+
+            <p class="reveal"><strong>For example:</strong> 📝<br>
+            • One nurse might go around giving <em>everyone</em> their medicine.<br>
+            • Another nurse checks <em>everyone’s</em> blood pressure.<br>
+            • Another nurse might handle discharge planning (helping patients get ready to go home).<br>
+            • A nursing assistant might just be responsible for making beds or giving baths to everyone.</p>
+
+            <p class="reveal"><strong>Why do we do this? (The Good Stuff)</strong> ✅<br>
+            It’s very efficient! A small number of nurses can take care of a HUGE number of patients because everyone sticks to their specific task. It also saves money because you can use less expensive assistants for simple tasks.</p>
+
+            <p class="reveal"><strong>But... there’s a catch. (The Bad Stuff)</strong> ⚠️<br>
+            Because everyone is just doing "tasks," the care can feel <strong>fragmented</strong>. It can feel a bit robotic or depersonalized. Imagine 5 different people coming into your room in one hour! Also, because no <em>one</em> person is responsible for the <strong>whole</strong> patient, emotional needs might get ignored. 😢</p>
+
+            <p class="reveal">Okay, let’s now move on to a model that tries to fix that "robotic" feeling...</p>
+
+            <!-- 2. Team Nursing -->
+            <h2 class="reveal">2. Team Nursing</h2>
+
+            <p class="reveal">Think of your favorite sports team, like a football team. ⚽ You have a Captain, and then you have other players.</p>
+
+            <p class="reveal"><strong>Team Nursing</strong> is exactly like that! It focuses on giving individualized care through a group or "team" of different people—professionals, technical staff, and assistants.</p>
+
+            <p class="reveal">The <strong>Registered Nurse (RN)</strong> is the Captain (Team Leader). 👩‍✈️ They are responsible for supervising the team and planning the care. They handle the really sick patients who need skilled help.</p>
+
+            <p class="reveal">Then, licensed practical nurses might help patients who aren't as sick, while nursing assistants help with meals and making beds. But they all work <strong>together</strong> for a specific group of patients.</p>
+
+            <p class="reveal"><strong>Why do we like this?</strong> 👍<br>
+            It is cost-effective and helps the Registered Nurse get more done. It also feels a bit more personal than the "Functional" factory method we just talked about.</p>
+
+            <p class="reveal"><strong>However...</strong> 🛑<br>
+            The major disadvantage is that some people believe that if patients are <em>very</em> sick (high acuity), there isn't much work that can be safely "delegated" or handed off to the assistants. Also, if the Team Leader isn't a good communicator, the team falls apart!</p>
+
+            <p class="reveal">Now that we understand the "Team," let’s talk about a model where ONE nurse takes charge...</p>
+
+            <!-- 3. Primary Nursing -->
+            <h2 class="reveal">3. Primary Nursing</h2>
+
+            <p class="reveal">This is the "Super Nurse" model! 🦸‍♀️ In <strong>Primary Nursing</strong>, one professional nurse is responsible for the <strong>TOTAL care</strong> of a patient 24 hours a day, 7 days a week.</p>
+
+            <p class="reveal">Wait, does that mean the nurse never sleeps? 😴 No! But even when that nurse goes home, they are still the "boss" of that patient's care plan. Other nurses (associates) follow <em>their</em> instructions when they are away.</p>
+
+            <p class="reveal">The Primary Nurse assesses needs, sets goals, and makes the plan. They handle everything: teaching, decision-making, and advocating for the patient.</p>
+
+            <p class="reveal"><strong>The Best Part:</strong> 🌟<br>
+            Continuity! The patient knows exactly who is in charge of them. The care is very consistent and comprehensive.</p>
+
+            <p class="reveal"><strong>The Hard Part:</strong> 💰<br>
+            You need a LOT of highly skilled Registered Nurses for this to work. That makes this system very <strong>expensive</strong> to maintain.</p>
+
+            <p class="reveal">Let’s now dive into a model that puts the patient right in the center...</p>
+
+            <!-- 4. Patient-Centered Nursing -->
+            <h2 class="reveal">4. Patient-Centered Nursing</h2>
+
+            <p class="reveal">The name says it all! The central figure here is the <strong>Patient</strong>. 🛌</p>
+
+            <p class="reveal">In the old days, if you needed an X-ray, you went to the X-ray room. If you needed blood drawn, you went to the lab. In <strong>Patient-Centered Nursing</strong>, we try to bring all those services <em>to the patient</em>!</p>
+
+            <p class="reveal">The idea is to move services closer to the bedside. This reduces the number of steps and people involved. It promotes "cross-training," meaning workers learn multiple skills (like a nurse who can also do an ECG test). 📉</p>
+
+            <p class="reveal">This reduces stress for the patient because they don't have to be wheeled around the hospital all day!</p>
+
+            <p class="reveal">Next, we’ll look at the "Grandfather" of nursing models...</p>
+
+            <!-- 5. Case Method -->
+            <h2 class="reveal">5. Case Method</h2>
+
+            <p class="reveal">This is one of the earliest models, also called <strong>Total Care</strong>. 🕰️</p>
+
+            <p class="reveal">In this method, one nurse is assigned to a group of patients and handles EVERYTHING for them during an 8 to 12-hour shift. They assess, plan, and give all the care.</p>
+
+            <p class="reveal"><strong>"Wait," you might ask, "Isn't that just Primary Nursing?"</strong> 🤔</p>
+
+            <p class="reveal">Good question! The difference is the time frame. In Primary Nursing, the nurse is responsible <strong>24/7</strong>. In the Case Method, the nurse is only responsible for the patient <strong>during that specific shift</strong>. Once they clock out, their responsibility ends.</p>
+
+            <p class="reveal">At this point, it’s important to consider how education changes a nurse's role...</p>
+
+            <!-- 6. Differentiated Practice Model -->
+            <h2 class="reveal">6. Differentiated Practice Model</h2>
+
+            <p class="reveal">This model is all about <strong>Qualifications</strong>. 🎓</p>
+
+            <p class="reveal">It recognizes that nurses have different levels of education. A nurse with a Diploma has different training than a nurse with a Bachelor’s degree, or a Master’s degree, or a PhD.</p>
+
+            <p class="reveal">So, in this model, we assign roles based on education and skill. It creates specific job descriptions for everyone. It clearly separates what a licensed nurse does versus an unlicensed assistant. This helps give quality care at an affordable cost.</p>
+
+            <p class="reveal">Finally, let’s wrap up with two variations...</p>
+
+            <!-- 7. Total Client Care and Modular Nursing -->
+            <h2 class="reveal">7. Total Client Care and Modular Nursing</h2>
+
+            <p class="reveal">These are cousins of the Primary Nursing system. 👯</p>
+
+            <p class="reveal"><strong>Total Client Care:</strong> Just like we discussed, one nurse does everything for the shift. But, the responsibility changes from shift to shift. We use RNs for the hard cases and LPNs (Licensed Practical Nurses) for the simpler ones.</p>
+
+            <p class="reveal"><strong>Modular Nursing:</strong> Imagine dividing the hospital ward into small "pods" or "modules." 🧩 A group of nurses is assigned to a specific module (a small geographic area of the ward). This ensures that the patients in that corner get cared for by the same faces regularly.</p>
+
+            <p class="reveal">And there you have it! Those are the main ways we organize nursing care to help people get better! 🎉</p>
+
+            <!-- VIP Section (Continuous) -->
+            <div class="vip-container reveal">
+                <p class="vip-text">
+                    Join our VIP if you're yet to, for more study materials and other bonuses (worth #115,000).<br>
+                    For more details click below
+                    <br>👇
+                </p>
+                
+                <a href="https://tinyurl.com/2dbtvx2b" target="_blank" class="vip-btn">
+                    Click Here
+                </a>
+            </div>
+
+        </div> <!-- End content flow -->
+    </div> <!-- End container -->
+
+    <script>
+        // --- SCROLL PROGRESS BAR ---
+        window.onscroll = function() {
+            let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            let scrolled = (winScroll / height) * 100;
+            document.getElementById("progressBar").style.width = scrolled + "%";
+        };
+
+        // --- SCROLL REVEAL ANIMATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const reveals = document.querySelectorAll('.reveal');
+
+            const revealOnScroll = () => {
+                const windowHeight = window.innerHeight;
+                const elementVisible = 50; // Distance from bottom before triggering
+
+                reveals.forEach((reveal) => {
+                    const elementTop = reveal.getBoundingClientRect().top;
+                    if (elementTop < windowHeight - elementVisible) {
+                        reveal.classList.add('active');
+                    }
+                });
+            };
+
+            // Trigger once on load
+            revealOnScroll();
+
+            // Trigger on scroll
+            window.addEventListener('scroll', revealOnScroll);
+        });
+    </script>
+</body>
+  </html>
